@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: compat-demo
+  namespace: compat-demo
+spec:
+  selector:
+    app: compat-demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: compat-demo
+  namespace: compat-demo
+spec:
+  to:
+    kind: Service
+    name: compat-demo
+  port:
+    targetPort: http

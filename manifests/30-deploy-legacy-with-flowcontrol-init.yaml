@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compat-demo
+  namespace: compat-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: compat-demo
+  template:
+    metadata:
+      labels:
+        app: compat-demo
+    spec:
+      serviceAccountName: compat-demo-sa
+
+      initContainers:
+      - name: apply-legacy-flowcontrol
+        image: registry.redhat.io/openshift4/ose-cli:v4.14
+        command:
+          - /bin/bash
+          - -lc
+          - |
+            set -euo pipefail
+            echo "[init] Applying legacy FlowSchema v1beta2..."
+            oc apply -f /manifests/flowschema-v1beta2.yaml
+            echo "[init] Done."
+        volumeMounts:
+          - name: flowcontrol-manifests
+            mountPath: /manifests
+            readOnly: true
+
+      containers:
+      - name: app
+        image: image-registry.openshift-image-registry.svc:5000/compat-demo/compat-demo:latest
+        ports:
+          - containerPort: 8080
+        env:
+          - name: PORT
+            value: "8080"
+
+      volumes:
+        - name: flowcontrol-manifests
+          configMap:
+            name: flowcontrol-legacy
+            items:
+              - key: flowschema-v1beta2.yaml
+                path: flowschema-v1beta2.yaml
