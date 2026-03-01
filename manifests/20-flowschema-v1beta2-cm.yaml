@@ -14,10 +14,9 @@ data:
       priorityLevelConfiguration:
         name: exempt
       rules:
-      - resourceRules:
-        - apiGroups: ["*"]
-          resources: ["*"]
-          verbs: ["*"]
+      - nonResourceRules:
+        - verbs: ["*"]
+          nonResourceURLs: ["*"]
         subjects:
         - kind: Group
           group:
