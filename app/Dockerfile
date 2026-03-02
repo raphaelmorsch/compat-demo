@@ -1,33 +1,19 @@
-FROM registry.access.redhat.com/ubi9/python-311:latest
+FROM python:3.11-slim
 
-WORKDIR /opt/app-root/src
+WORKDIR /opt/app
 COPY server.py .
 
-# Instala ferramentas úteis de rede (UBI9/RHEL9)
-# - iputils: ping
-# - iproute: ip/ss/route
-# - net-tools: netstat/ifconfig (legado, mas ainda útil)
-# - bind-utils: dig/nslookup
-# - nmap-ncat: nc
-# - traceroute: traceroute
-# - tcpdump: captura (pode exigir capabilities no Pod)
-# - procps-ng: ps/top (às vezes ajuda no debug)
-USER 0
-RUN microdnf -y update && \
-    microdnf -y install \
-      iputils \
-      iproute \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      iputils-ping \
+      iproute2 \
       net-tools \
-      bind-utils \
-      nmap-ncat \
+      dnsutils \
+      netcat-openbsd \
       traceroute \
       tcpdump \
-      procps-ng \
-      && microdnf clean all && \
-      rm -rf /var/cache/yum
-USER 1001
+      procps \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PORT=8080
 EXPOSE 8080
-
 CMD ["python", "server.py"]
