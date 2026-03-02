@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: compat-demo
   namespace: compat-demo
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"compat-demo:latest","namespace":"compat-demo"},
+        "fieldPath":"spec.template.spec.containers[0].image"}]
 spec:
   replicas: 1
   selector:
