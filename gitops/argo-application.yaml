@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: compat-demo
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/raphaelmorsch/compat-demo.git
+    targetRevision: main
+    path: gitops/overlays/ocp420
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: compat-demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
