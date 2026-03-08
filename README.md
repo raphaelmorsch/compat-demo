@@ -443,13 +443,3 @@ This demo can be expanded with:
 Raphael Morsch
 
 Red Hat Solutions Architect / Platform Engineering
-
----
-
-If you'd like, I can also help you create:
-
-* **a diagram showing Kubernetes API deprecations across versions**
-* **slides for presenting this demo**
-* **a GitOps promotion pipeline (dev → staging → prod)**
-
-which makes this demo even stronger for presentations.
