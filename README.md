@@ -1,18 +1,3 @@
-Abaixo está um **README.md completo**, pronto para colocar na raiz do seu repositório.
-Ele inclui:
-
-* explicação da demo
-* arquitetura
-* comparação OpenShift 4.12 vs 4.20
-* diagramas (Mermaid)
-* passo a passo completo
-* comandos para comprovar a remoção da API
-* fluxo de CI/CD moderno
-
-Você pode copiar **diretamente como `README.md`**.
-
----
-
 # Kubernetes / OpenShift Compatibility Demo
 
 This repository demonstrates a **real-world compatibility scenario** when migrating Kubernetes workloads between platform versions.
