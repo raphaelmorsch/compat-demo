@@ -1,0 +1,29 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: compat-demo-listener
+  namespace: compat-demo
+spec:
+  serviceAccountName: compat-demo-pipeline
+  triggers:
+    - name: github-pr-trigger
+      interceptors:
+        - ref:
+            name: github
+          params:
+            - name: secretRef
+              value:
+                secretName: github-webhook-secret
+                secretKey: secret
+            - name: eventTypes
+              value:
+                - pull_request
+        - ref:
+            name: cel
+          params:
+            - name: filter
+              value: "body.action in ['opened', 'synchronize', 'reopened']"
+      bindings:
+        - ref: compat-demo-pr-binding
+      template:
+        ref: compat-demo-pr-template
