@@ -1,0 +1,45 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: compat-demo-pr-template
+  namespace: compat-demo
+spec:
+  params:
+    - name: git-url
+    - name: git-revision
+    - name: git-sha
+    - name: pr-number
+    - name: event-type
+  resourceTemplates:
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      name: compat-demo-pr-pipeline-run
+      metadata:
+        generateName: compat-demo-pr-
+        namespace: compat-demo
+        labels:
+          app: compat-demo
+          trigger: github-pr
+          pr-number: $(params.pr-number)
+        spec:
+          serviceAccountName: compat-demo-pipeline
+          pipelineRef:
+            name: compat-demo-pipeline
+          params:
+            - name: git-url
+              value: $(params.git-url)
+            - name: git-revision
+              value: $(params.git-revision)
+            - name: context-dir
+              value: app
+            - name: image
+              value: image-registry.openshift-image-registry.svc:5000/compat-demo/compat-demo:latest
+          workspaces:
+            - name: shared-workspace
+              volumeClaimTemplate:
+                spec:
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 1Gi

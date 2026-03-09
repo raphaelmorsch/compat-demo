@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: compat-demo-listener
+  namespace: compat-demo
+spec:
+  to:
+    kind: Service
+    name: el-compat-demo-listener
+  port:
+    targetPort: http-listener
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

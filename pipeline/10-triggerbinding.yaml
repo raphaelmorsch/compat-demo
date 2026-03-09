@@ -1,0 +1,17 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: compat-demo-pr-binding
+  namespace: compat-demo
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.clone_url)
+    - name: git-revision
+      value: $(body.pull_request.head.ref)
+    - name: git-sha
+      value: $(body.pull_request.head.sha)
+    - name: git-context-dir
+      value: app
+    - name: event-type
+      value: $(header.x-github-event)
